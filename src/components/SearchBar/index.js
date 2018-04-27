@@ -49,13 +49,20 @@ class SearchBar extends React.Component {
 
     const wikiQueryUrl = `${wikiBaseUrl}?${querystring.stringify(wikiParameters)}`;
 
-    this.incrementApiRequestCount();
-    fetch(wikiQueryUrl, fetchOptions)
-      .then(response => response.json())
-      .then(response => {
-        const suggestions = response.query.search;
-        this.setState({ suggestions: suggestions });
-      });
+    const cachedSuggestions = localStorage.getItem(wikiQueryUrl);
+
+    if (cachedSuggestions) {
+      this.setState({ suggestions: cachedSuggestions && JSON.parse(cachedSuggestions) });
+    } else {
+      this.incrementApiRequestCount();
+      fetch(wikiQueryUrl, fetchOptions)
+        .then(response => response.json())
+        .then(response => {
+          const suggestions = response.query.search;
+          localStorage.setItem(wikiQueryUrl, JSON.stringify(suggestions));
+          this.setState({ suggestions: suggestions });
+        });
+    }
   }
 
   onChange = (event, { newValue }) => {
