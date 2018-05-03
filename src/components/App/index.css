@@ -1,0 +1,10 @@
+.App {
+  background-color: #fff;
+  font-family: sans-serif;
+}
+
+.Header {
+  border-bottom: 1px solid #ddd;
+  height: 64px;
+  padding-left: 16px;
+}

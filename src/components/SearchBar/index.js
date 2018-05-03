@@ -3,6 +3,7 @@ import "./index.css";
 import Autosuggest from 'react-autosuggest';
 import fetch from 'isomorphic-fetch';
 import querystring from 'querystring';
+import classNames from 'classnames';
 
 
 const fetchOptions = {
@@ -15,11 +16,13 @@ const wikiBaseUrl = 'https://en.wikivoyage.org/w/api.php';
 
 const getSuggestionValue = suggestion => suggestion.title;
 
-const renderSuggestion = (suggestion, { query, isHighlighted }) => (
-  <div className={isHighlighted ? "highlighted" : ""}>
-    {suggestion.title}
-  </div>
-);
+const renderSuggestion = (suggestion, { query, isHighlighted }) => {
+  const suggestionClass = classNames({
+    'SearchBar__Suggestion': true,
+    'SearchBar__Suggestion--highlighted': isHighlighted
+  });
+  return <div className={suggestionClass}>{suggestion.title}</div>;
+}
 
 class SearchBar extends React.Component {
   constructor() {
@@ -64,7 +67,6 @@ class SearchBar extends React.Component {
       fetch(wikiQueryUrl, fetchOptions)
         .then(response => response.json())
         .then(response => {
-          console.log(response);
           const suggestions = response.query.search;
           localStorage.setItem(wikiQueryUrl, JSON.stringify(suggestions));
           this.setState({ suggestions: suggestions });
@@ -89,7 +91,7 @@ class SearchBar extends React.Component {
   };
 
   render() {
-    const { value, suggestions, apiRequestCount } = this.state;
+    const { value, suggestions } = this.state;
     const inputProps = {
       placeholder: "Anywhere",
       value,
@@ -97,8 +99,7 @@ class SearchBar extends React.Component {
     };
 
     return (
-      <div className="searchbar">
-        <div>API requests: {apiRequestCount}</div>
+      <div className="SearchBar">
         <Autosuggest
           suggestions={suggestions}
           onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}

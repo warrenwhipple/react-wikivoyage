@@ -1,0 +1,9 @@
+.Header {
+  display: flex;
+  align-items: center;
+}
+.SearchBar {
+  font-size: 18px;
+  width: 30em;
+  max-width: 100%;
+}

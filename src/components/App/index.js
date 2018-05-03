@@ -1,12 +1,14 @@
 import React from 'react';
 import './index.css';
-import SearchBar from '../SearchBar';
+import Header from '../Header';
+import WikiPage from '../WikiPage'
 
 class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <SearchBar />
+        <Header />
+        <WikiPage title="No page selected" />
       </div>
     );
   }
