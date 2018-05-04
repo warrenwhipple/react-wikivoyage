@@ -1,8 +1,9 @@
 import React from 'react';
+import './index.css';
 
-const WikiPage = ({title}) => (
+const WikiPage = ({ pageId }) => (
   <div className="WikiPage">
-    {title}
+    {pageId ? ('Page ID: ' + pageId) : 'No page ID'}
   </div>
 );
 

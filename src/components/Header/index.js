@@ -2,9 +2,9 @@ import React from 'react';
 import './index.css';
 import SearchBar from '../SearchBar';
 
-const Header = () => (
+const Header = ({ onPageSelected }) => (
   <div className="Header">
-    <SearchBar />
+    <SearchBar onPageSelected={onPageSelected} />
   </div>
 );
 

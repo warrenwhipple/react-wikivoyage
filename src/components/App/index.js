@@ -4,11 +4,21 @@ import Header from '../Header';
 import WikiPage from '../WikiPage'
 
 class App extends React.Component {
+  state = {
+    currentPageId: null
+  };
+
+  onPageSelected = (pageId) => {
+    this.setState({currentPageId: pageId});
+  };
+
   render() {
+    const {currentPageId} = this.state;
+
     return (
       <div className="App">
-        <Header />
-        <WikiPage title="No page selected" />
+        <Header onPageSelected={this.onPageSelected}/>
+        <WikiPage pageId={currentPageId} />
       </div>
     );
   }

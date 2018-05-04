@@ -25,8 +25,8 @@ const renderSuggestion = (suggestion, { query, isHighlighted }) => {
 }
 
 class SearchBar extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       value: '',
@@ -61,6 +61,7 @@ class SearchBar extends React.Component {
     const cachedSuggestions = localStorage.getItem(wikiQueryUrl);
 
     if (cachedSuggestions) {
+      // console.log(cachedSuggestions);
       this.setState({ suggestions: cachedSuggestions && JSON.parse(cachedSuggestions) });
     } else {
       this.incrementApiRequestCount();
@@ -68,6 +69,7 @@ class SearchBar extends React.Component {
         .then(response => response.json())
         .then(response => {
           const suggestions = response.query.search;
+          // console.log(suggestions);
           localStorage.setItem(wikiQueryUrl, JSON.stringify(suggestions));
           this.setState({ suggestions: suggestions });
         });
@@ -90,10 +92,15 @@ class SearchBar extends React.Component {
     });
   };
 
+  onSuggestionSelected = (event, { suggestion }) => {
+    this.props.onPageSelected(suggestion.pageid);
+  };
+
   render() {
     const { value, suggestions } = this.state;
+
     const inputProps = {
-      placeholder: "Anywhere",
+      placeholder: "Search Wikivoyage",
       value,
       onChange: this.onChange
     };
@@ -104,6 +111,7 @@ class SearchBar extends React.Component {
           suggestions={suggestions}
           onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+          onSuggestionSelected={this.onSuggestionSelected}
           getSuggestionValue={getSuggestionValue}
           renderSuggestion={renderSuggestion}
           inputProps={inputProps}
