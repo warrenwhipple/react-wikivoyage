@@ -1,20 +1,10 @@
 import React from 'react';
 import "./index.css";
 import Autosuggest from 'react-autosuggest';
-import fetch from 'isomorphic-fetch';
-import querystring from 'querystring';
 import classNames from 'classnames';
+import WikiFetchCache from '../../wiki-fetch-cache';
 
-
-const fetchOptions = {
-  method: 'GET',
-  // https://www.mediawiki.org/wiki/API:Main_page#Identifying_your_client
-  headers: { 'User-Agent': 'Warren Whipple <modalrealist@gmail.com>' }
-};
-
-const wikiBaseUrl = 'https://en.wikivoyage.org/w/api.php';
-
-const getSuggestionValue = suggestion => suggestion.title;
+const getSuggestionValue = (suggestion) => suggestion.title;
 
 const renderSuggestion = (suggestion, { query, isHighlighted }) => {
   const suggestionClass = classNames({
@@ -30,50 +20,19 @@ class SearchBar extends React.Component {
 
     this.state = {
       value: '',
-      suggestions: [],
-      apiRequestCount: 0,
+      suggestions: []
     };
 
-    this.lastRequestId = null;
-  }
-
-  incrementApiRequestCount = () => {
-    this.setState((prevState, props) => ({
-      apiRequestCount: prevState.apiRequestCount + 1
-    }));
+    this.wiki = new WikiFetchCache('https://en.wikivoyage.org/w/api.php');
   }
 
   loadSuggestions = (value) => {
-    const wikiParameters = {
-      // https://www.mediawiki.org/wiki/API:Cross-site_requests
-      origin: '*',
-      // https://www.mediawiki.org/wiki/API:JSON_version_2
-      format: 'json',
-      formatversion: 2,
-      // https://www.mediawiki.org/wiki/API:Search
-      action: 'query',
-      list: 'search',
-      srsearch: value,
-    };
-
-    const wikiQueryUrl = `${wikiBaseUrl}?${querystring.stringify(wikiParameters)}`;
-
-    const cachedSuggestions = localStorage.getItem(wikiQueryUrl);
-
-    if (cachedSuggestions) {
-      // console.log(cachedSuggestions);
-      this.setState({ suggestions: cachedSuggestions && JSON.parse(cachedSuggestions) });
-    } else {
-      this.incrementApiRequestCount();
-      fetch(wikiQueryUrl, fetchOptions)
-        .then(response => response.json())
-        .then(response => {
-          const suggestions = response.query.search;
-          // console.log(suggestions);
-          localStorage.setItem(wikiQueryUrl, JSON.stringify(suggestions));
-          this.setState({ suggestions: suggestions });
+    this.wiki.search(value)
+      .then(suggestions => {
+        this.setState({
+          suggestions: suggestions
         });
-    }
+      });
   }
 
   onChange = (event, { newValue }) => {
