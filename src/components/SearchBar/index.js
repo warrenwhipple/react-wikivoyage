@@ -1,18 +1,18 @@
 import React from 'react';
-import "./index.css";
+import './index.css';
 import Autosuggest from 'react-autosuggest';
 import classNames from 'classnames';
 import WikiFetchCache from '../../wiki-fetch-cache';
 
-const getSuggestionValue = (suggestion) => suggestion.title;
+const getSuggestionValue = suggestion => suggestion.title;
 
 const renderSuggestion = (suggestion, { query, isHighlighted }) => {
   const suggestionClass = classNames({
-    'SearchBar__Suggestion': true,
+    SearchBar__Suggestion: true,
     'SearchBar__Suggestion--highlighted': isHighlighted
   });
   return <div className={suggestionClass}>{suggestion.title}</div>;
-}
+};
 
 class SearchBar extends React.Component {
   constructor(props) {
@@ -26,14 +26,13 @@ class SearchBar extends React.Component {
     this.wiki = new WikiFetchCache('https://en.wikivoyage.org/w/api.php');
   }
 
-  loadSuggestions = (value) => {
-    this.wiki.search(value)
-      .then(suggestions => {
-        this.setState({
-          suggestions: suggestions
-        });
+  loadSuggestions = value => {
+    this.wiki.search(value).then(suggestions => {
+      this.setState({
+        suggestions: suggestions
       });
-  }
+    });
+  };
 
   onChange = (event, { newValue }) => {
     this.setState({
@@ -59,7 +58,7 @@ class SearchBar extends React.Component {
     const { value, suggestions } = this.state;
 
     const inputProps = {
-      placeholder: "Search Wikivoyage",
+      placeholder: 'Search Wikivoyage',
       value,
       onChange: this.onChange
     };

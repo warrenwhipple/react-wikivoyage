@@ -12,7 +12,7 @@ const apiSharedParameters = {
   origin: '*',
   // https://www.mediawiki.org/wiki/API:JSON_version_2
   format: 'json',
-  formatversion: 2,
+  formatversion: 2
 };
 
 class WikiFetchCache {
@@ -27,7 +27,7 @@ class WikiFetchCache {
       // https://www.mediawiki.org/wiki/API:Search
       action: 'query',
       list: 'search',
-      srsearch: value,
+      srsearch: value
     };
 
     const queryUrl = `${this.apiUrl}?${querystring.stringify(apiParameters)}`;
@@ -38,7 +38,7 @@ class WikiFetchCache {
       return Promise.resolve(JSON.parse(cachedSuggestions));
 
     this.apiRequestCount++;
-    console.log("Wikie API requests: " + this.apiRequestCount);
+    console.log('Wikie API requests: ' + this.apiRequestCount);
 
     return fetch(queryUrl, fetchOptions)
       .then(response => response.json())
@@ -47,8 +47,7 @@ class WikiFetchCache {
         localStorage.setItem(queryUrl, JSON.stringify(suggestions));
         return suggestions;
       });
-
-  }
+  };
 }
 
 export default WikiFetchCache;
