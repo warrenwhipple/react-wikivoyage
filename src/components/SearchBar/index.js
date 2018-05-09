@@ -2,7 +2,6 @@ import React from 'react';
 import './index.css';
 import Autosuggest from 'react-autosuggest';
 import classNames from 'classnames';
-import WikiFetchCache from '../../wiki-fetch-cache';
 
 const getSuggestionValue = suggestion => suggestion.title;
 
@@ -15,23 +14,9 @@ const renderSuggestion = (suggestion, { query, isHighlighted }) => {
 };
 
 class SearchBar extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      value: '',
-      suggestions: []
-    };
-
-    this.wiki = new WikiFetchCache('https://en.wikivoyage.org/w/api.php');
-  }
-
-  loadSuggestions = value => {
-    this.wiki.search(value).then(suggestions => {
-      this.setState({
-        suggestions: suggestions
-      });
-    });
+  state = {
+    value: '',
+    suggestions: []
   };
 
   onChange = (event, { newValue }) => {
@@ -41,7 +26,11 @@ class SearchBar extends React.Component {
   };
 
   onSuggestionsFetchRequested = ({ value }) => {
-    this.loadSuggestions(value);
+    this.props.wiki.search(value).then(suggestions => {
+      this.setState({
+        suggestions: suggestions
+      });
+    });
   };
 
   onSuggestionsClearRequested = () => {
