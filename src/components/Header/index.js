@@ -2,9 +2,9 @@ import React from 'react';
 import './index.css';
 import SearchBar from '../SearchBar';
 
-const Header = ({ wiki, onPageSelected }) => (
+const Header = props => (
   <div className="Header">
-    <SearchBar wiki={wiki} onPageSelected={onPageSelected} />
+    <SearchBar {...props} />
   </div>
 );
 

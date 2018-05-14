@@ -1,6 +1,11 @@
 import fetch from 'isomorphic-fetch';
 import querystring from 'querystring';
 
+export const wikiPath = title => `/wiki/${title.replace(' ', '_')}`;
+
+export const wikiTitle = path =>
+  path.replace(/^\/wiki\//, '').replace('_', ' ');
+
 const fetchOptions = {
   method: 'GET',
   // https://www.mediawiki.org/wiki/API:Main_page#Identifying_your_client
@@ -52,11 +57,12 @@ class WikiFetchCache {
       });
   };
 
-  page = pageId => {
+  page = path => {
+    console.log(wikiTitle(path));
     const apiSpecialParameters = {
-      // https://www.mediawiki.org/wiki/API:Query
+      // https://www.mediawiki.org/wiki/API:Parsing_wikitext
       action: 'parse',
-      pageid: pageId,
+      page: wikiTitle(path),
       prop: 'text'
     };
 
