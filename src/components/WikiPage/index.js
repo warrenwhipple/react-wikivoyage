@@ -1,13 +1,14 @@
 import React from 'react';
-import ReactHtmlParser from 'react-html-parser';
+import DOMPurify from 'dompurify';
 import './index.css';
 
 const WikiPage = ({ title, html }) => (
   <div className="WikiPage">
     <h1 className="WikiPage--title">{title ? title : 'No Page Title'}</h1>
-    <div className="WikiPage--content">
-      {html ? ReactHtmlParser(html) : 'No page text.'}
-    </div>
+    <div
+      className="WikiPage--content"
+      dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }}
+    />
   </div>
 );
 
