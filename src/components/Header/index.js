@@ -1,10 +1,10 @@
 import React from 'react';
-import './index.css';
 import SearchBar from '../SearchBar';
+import './index.css';
 
 const Header = props => (
   <div className="Header">
-    <SearchBar {...props} />
+    <SearchBar />
   </div>
 );
 

@@ -1,9 +1,9 @@
 import React from 'react';
-import './index.css';
 import Autosuggest from 'react-autosuggest';
 import classNames from 'classnames';
 import { withRouter } from 'react-router-dom';
-import { wikiPath } from '../../wiki-fetch-cache';
+import { wikiPath, wikiSearch } from '../../wiki-fetch-cache';
+import './index.css';
 
 const getSuggestionValue = suggestion => suggestion.title;
 
@@ -17,7 +17,22 @@ const renderSuggestion = (suggestion, { query, isHighlighted }) => {
 
 class SearchBar extends React.Component {
   state = {
-    value: ''
+    value: '',
+    suggestions: []
+  };
+
+  onSuggestionsFetchRequested = ({ value }) => {
+    wikiSearch(value).then(suggestions => {
+      this.setState({
+        suggestions: suggestions
+      });
+    });
+  };
+
+  onSuggestionsClearRequested = () => {
+    this.setState({
+      suggestions: []
+    });
   };
 
   onChange = (event, { newValue }) => {
@@ -31,13 +46,7 @@ class SearchBar extends React.Component {
   };
 
   render() {
-    const {
-      suggestions,
-      onSuggestionsFetchRequested,
-      onSuggestionsClearRequested
-    } = this.props;
-
-    const { value } = this.state;
+    const { value, suggestions } = this.state;
 
     const inputProps = {
       placeholder: 'Search Wikivoyage',
@@ -49,8 +58,8 @@ class SearchBar extends React.Component {
       <div className="SearchBar">
         <Autosuggest
           suggestions={suggestions}
-          onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-          onSuggestionsClearRequested={onSuggestionsClearRequested}
+          onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
           onSuggestionSelected={this.onSuggestionSelected}
           getSuggestionValue={getSuggestionValue}
           renderSuggestion={renderSuggestion}
