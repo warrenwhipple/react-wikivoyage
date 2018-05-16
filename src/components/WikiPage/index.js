@@ -1,10 +1,21 @@
+// @flow
 import React from 'react';
 import DOMPurify from 'dompurify';
 import { wikiPage } from '../../wiki-fetch-cache';
 import { withRouter } from 'react-router-dom';
+import type { Location } from 'react-router-dom';
 import './index.css';
 
-class WikiPage extends React.Component {
+type Props = {
+  location: Location
+};
+
+type State = {
+  title: string,
+  html: string
+};
+
+class WikiPage extends React.Component<Props, State> {
   state = {
     title: '',
     html: ''

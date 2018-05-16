@@ -1,9 +1,11 @@
+// @flow
 import fetch from 'isomorphic-fetch';
 import querystring from 'querystring';
 
-export const wikiPath = title => `/wiki/${title.replace(' ', '_')}`;
+export const wikiPath = (title: string): string =>
+  `/wiki/${title.replace(' ', '_')}`;
 
-export const wikiTitle = path =>
+export const wikiTitle = (path: string): string =>
   path.replace(/^\/wiki\//, '').replace('_', ' ');
 
 const fetchOptions = {
@@ -25,11 +27,18 @@ const wikiQueryUrl = apiSpecialParameters => {
   return `${apiUrl}?${querystring.stringify(apiParameters)}`;
 };
 
-export const wikiSearch = searchString => {
+export type WikiSuggestion = {
+  title: string
+};
+
+export const wikiSearch = (
+  searchString: string
+): Promise<Array<WikiSuggestion>> => {
   const apiSpecialParameters = {
     // https://www.mediawiki.org/wiki/API:Search
     action: 'query',
     list: 'search',
+    srprop: '',
     srsearch: searchString
   };
 
@@ -52,7 +61,12 @@ export const wikiSearch = searchString => {
     });
 };
 
-export const wikiPage = path => {
+export type WikiPage = {
+  title: string,
+  text: string
+};
+
+export const wikiPage = (path: string): Promise<WikiPage> => {
   const apiSpecialParameters = {
     // https://www.mediawiki.org/wiki/API:Parsing_wikitext
     action: 'parse',

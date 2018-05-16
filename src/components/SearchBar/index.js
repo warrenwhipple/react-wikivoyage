@@ -1,8 +1,11 @@
+// @flow
 import React from 'react';
 import Autosuggest from 'react-autosuggest';
 import classNames from 'classnames';
 import { withRouter } from 'react-router-dom';
+import type { RouterHistory } from 'react-router-dom';
 import { wikiPath, wikiSearch } from '../../wiki-fetch-cache';
+import type { WikiSuggestion } from '../../wiki-fetch-cache';
 import './index.css';
 
 const getSuggestionValue = suggestion => suggestion.title;
@@ -15,7 +18,16 @@ const renderSuggestion = (suggestion, { query, isHighlighted }) => {
   return <div className={suggestionClass}>{suggestion.title}</div>;
 };
 
-class SearchBar extends React.Component {
+type Props = {
+  history: RouterHistory
+};
+
+type State = {
+  value: string,
+  suggestions: Array<WikiSuggestion>
+};
+
+class SearchBar extends React.Component<Props, State> {
   state = {
     value: '',
     suggestions: []

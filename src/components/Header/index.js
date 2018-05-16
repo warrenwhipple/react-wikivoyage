@@ -1,8 +1,9 @@
+// @flow
 import React from 'react';
 import SearchBar from '../SearchBar';
 import './index.css';
 
-const Header = props => (
+const Header = () => (
   <div className="Header">
     <SearchBar />
   </div>
