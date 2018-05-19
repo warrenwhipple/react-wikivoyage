@@ -35,6 +35,7 @@ class WikiPage extends React.Component<Props, State> {
           title: page.title,
           html: page.text
         });
+        window.scrollTo(0, 0);
       });
     }
   };
