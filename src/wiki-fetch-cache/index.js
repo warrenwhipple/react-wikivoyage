@@ -37,9 +37,8 @@ export const wikiSearch = (
   const apiSpecialParameters = {
     // https://www.mediawiki.org/wiki/API:Search
     action: 'query',
-    list: 'search',
-    srprop: '',
-    srsearch: searchString
+    list: 'prefixsearch',
+    pssearch: searchString
   };
 
   const queryUrl = wikiQueryUrl(apiSpecialParameters);
@@ -55,7 +54,7 @@ export const wikiSearch = (
   return fetch(queryUrl, fetchOptions)
     .then(response => response.json())
     .then(json => {
-      const suggestions = json.query.search;
+      const suggestions = json.query.prefixsearch;
       localStorage.setItem(queryUrl, JSON.stringify(suggestions));
       return suggestions;
     });
