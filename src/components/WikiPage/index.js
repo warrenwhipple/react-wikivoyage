@@ -30,10 +30,10 @@ class WikiPage extends React.Component<Props, State> {
         html: 'No text.'
       });
     } else {
-      wikiPage(location.pathname).then(page => {
+      wikiPage(location.pathname).then(pageData => {
         this.setState({
-          title: page.title,
-          html: page.text
+          title: pageData.lead.displaytitle,
+          html: pageData.lead.sections[0].text
         });
         window.scrollTo(0, 0);
       });

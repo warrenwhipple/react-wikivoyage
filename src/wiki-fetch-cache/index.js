@@ -27,13 +27,13 @@ const wikiQueryUrl = apiSpecialParameters => {
   return `${apiUrl}?${querystring.stringify(apiParameters)}`;
 };
 
-export type WikiSuggestion = {
+export type SuggestionData = {
   title: string
 };
 
 export const wikiSearch = (
   searchString: string
-): Promise<Array<WikiSuggestion>> => {
+): Promise<Array<SuggestionData>> => {
   const apiSpecialParameters = {
     // https://www.mediawiki.org/wiki/API:Search
     action: 'query',
@@ -60,35 +60,56 @@ export const wikiSearch = (
     });
 };
 
-export type WikiPage = {
-  title: string,
-  text: string
+export type SectionData = {
+  id: number,
+  text?: string,
+  toclevel?: number,
+  line?: string,
+  anchor?: string
 };
 
-export const wikiPage = (path: string): Promise<WikiPage> => {
-  const apiSpecialParameters = {
-    // https://www.mediawiki.org/wiki/API:Parsing_wikitext
-    action: 'parse',
-    page: wikiTitle(path),
-    prop: 'text'
-  };
+export type PageData = {
+  lead: {
+    displaytitle: string,
+    description: string,
+    image: {
+      file: string,
+      urls: {
+        '320': string,
+        '640': string,
+        '800': string,
+        '1024': string
+      }
+    },
+    sections: Array<SectionData>
+  },
+  remaining: {
+    sections: Array<SectionData>
+  }
+};
 
-  const queryUrl = wikiQueryUrl(apiSpecialParameters);
+export const wikiPage = (path: string): Promise<PageData> => {
+  const restTitle = encodeURIComponent(
+    path.replace(/^\/wiki\//, '').replace('_', ' ')
+  );
+  const restUrl = `https://en.wikivoyage.org/api/rest_v1/page/mobile-sections/${restTitle}`;
 
-  const cachedPage = localStorage.getItem(queryUrl);
+  const cachedData = localStorage.getItem(restUrl);
 
-  if (cachedPage) {
+  if (cachedData) {
     console.log('Page cache hit');
-    return Promise.resolve(JSON.parse(cachedPage));
+    return Promise.resolve(JSON.parse(cachedData));
   }
 
   console.log('Page API hit');
 
-  return fetch(queryUrl, fetchOptions)
-    .then(response => response.json())
+  return fetch(restUrl, fetchOptions)
+    .then(response => {
+      return response.json();
+    })
     .then(json => {
-      const page = json.parse;
-      localStorage.setItem(queryUrl, JSON.stringify(page));
-      return page;
+      console.log(json);
+      localStorage.setItem(restUrl, JSON.stringify(json));
+      return json;
     });
 };

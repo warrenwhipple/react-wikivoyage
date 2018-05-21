@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { withRouter } from 'react-router-dom';
 import type { RouterHistory } from 'react-router-dom';
 import { wikiPath, wikiSearch } from '../../wiki-fetch-cache';
-import type { WikiSuggestion } from '../../wiki-fetch-cache';
+import type { SuggestionData } from '../../wiki-fetch-cache';
 import './index.css';
 
 const getSuggestionValue = suggestion => suggestion.title;
@@ -24,7 +24,7 @@ type Props = {
 
 type State = {
   value: string,
-  suggestions: Array<WikiSuggestion>
+  suggestions: Array<SuggestionData>
 };
 
 class SearchBar extends React.Component<Props, State> {
