@@ -37,13 +37,17 @@ class WikiPage extends React.Component<Props, State> {
     }
   };
 
-  handleClick = (event: Event) => {
+  handleClick = (event: MouseEvent) => {
     const target = event.target;
-    if (target instanceof HTMLAnchorElement) {
-      if (target.hostname === window.location.hostname) {
-        event.preventDefault();
-        this.props.history.push(target.pathname);
-      }
+    if (
+      target instanceof HTMLAnchorElement &&
+      target.hostname === window.location.hostname &&
+      event.button === 0 &&
+      target.getAttribute('target') !== '_blank' &&
+      !(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey)
+    ) {
+      event.preventDefault();
+      this.props.history.push(target.pathname);
     }
   };
 
