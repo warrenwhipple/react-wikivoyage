@@ -108,7 +108,6 @@ export const wikiPage = (path: string): Promise<PageData> => {
       return response.json();
     })
     .then(json => {
-      console.log(json);
       localStorage.setItem(restUrl, JSON.stringify(json));
       return json;
     });
