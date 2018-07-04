@@ -4,10 +4,9 @@ import './index.css';
 
 const LandingPage = () => (
   <div className="LandingPage">
-    <h1 className="LandingPage__title">Pretty Wikivoyage</h1>
+    <h1 className="LandingPage__title">react-wikivoyage</h1>
     <div className="LandingPage__content">
-      A web application client view for{' '}
-      <a href="https://wikivoyage.org">Wikivoyage</a>.
+      A React client view for Wikivoyage.
     </div>
   </div>
 );
