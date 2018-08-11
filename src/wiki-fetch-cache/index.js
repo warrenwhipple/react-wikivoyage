@@ -9,9 +9,7 @@ export const wikiTitle = (path: string): string =>
   path.replace(/^\/wiki\//, '').replace('_', ' ');
 
 const fetchOptions = {
-  method: 'GET',
-  // https://www.mediawiki.org/wiki/API:Main_page#Identifying_your_client
-  headers: { 'User-Agent': 'Warren Whipple <modalrealist@gmail.com>' }
+  method: 'GET'
 };
 
 const wikiQueryUrl = apiSpecialParameters => {
