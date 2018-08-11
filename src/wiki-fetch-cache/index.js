@@ -60,41 +60,30 @@ export const wikiSearch = (
     });
 };
 
-export type SectionData = {
-  id: number,
-  text?: string,
-  toclevel?: number,
-  line?: string,
-  anchor?: string
-};
-
 export type PageData = {
-  lead: {
-    displaytitle: string,
-    description: string,
-    image: {
-      file: string,
-      urls: {
-        '320': string,
-        '640': string,
-        '800': string,
-        '1024': string
-      }
-    },
-    sections: Array<SectionData>
-  },
-  remaining: {
-    sections: Array<SectionData>
+  parse: {
+    pageid: Number,
+    text: string,
+    title: string
   }
 };
 
 export const wikiPage = (path: string): Promise<PageData> => {
-  const restTitle = encodeURIComponent(
-    path.replace(/^\/wiki\//, '').replace('_', ' ')
-  );
-  const restUrl = `https://en.wikivoyage.org/api/rest_v1/page/mobile-sections/${restTitle}`;
+  // const restTitle = encodeURIComponent(
+  //   path.replace(/^\/wiki\//, '').replace('_', ' ')
+  // );
+  // const restUrl = `https://en.wikivoyage.org/api/rest_v1/page/html/${restTitle}`;
 
-  const cachedData = localStorage.getItem(restUrl);
+  const apiSpecialParameters = {
+    // https://www.mediawiki.org/wiki/API:Parsing_wikitext
+    action: 'parse',
+    page: wikiTitle(path),
+    prop: 'text'
+  };
+
+  const queryUrl = wikiQueryUrl(apiSpecialParameters);
+
+  const cachedData = localStorage.getItem(queryUrl);
 
   if (cachedData) {
     console.log('Page cache hit');
@@ -103,12 +92,12 @@ export const wikiPage = (path: string): Promise<PageData> => {
 
   console.log('Page API hit');
 
-  return fetch(restUrl, fetchOptions)
+  return fetch(queryUrl, fetchOptions)
     .then(response => {
       return response.json();
     })
     .then(json => {
-      localStorage.setItem(restUrl, JSON.stringify(json));
+      localStorage.setItem(queryUrl, JSON.stringify(json));
       return json;
     });
 };

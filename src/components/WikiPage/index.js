@@ -2,10 +2,9 @@
 import React from 'react';
 import DOMPurify from 'dompurify';
 import { wikiPage } from '../../wiki-fetch-cache';
-import type { PageData, SectionData } from '../../wiki-fetch-cache';
+import type { PageData } from '../../wiki-fetch-cache';
 import { withRouter } from 'react-router-dom';
 import type { Location, RouterHistory } from 'react-router-dom';
-import WikiSection from '../WikiSection';
 import './index.css';
 
 type Props = {
@@ -63,18 +62,15 @@ class WikiPage extends React.Component<Props, State> {
   render() {
     const { pageData } = this.state;
     if (!pageData) return null;
-    const sectionComponent = (sectionData: SectionData) => (
-      <WikiSection key={sectionData.id.toString()} sectionData={sectionData} />
-    );
+    console.log(pageData);
     return (
-      <div className="WikiPage" onClick={this.handleClick}>
-        <h1>{pageData.lead.displaytitle}</h1>
+      <div className="WikiPage">
+      <h1>{pageData.parse.title}</h1>
         <div
           dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(pageData.lead.sections[0].text)
+            __html: DOMPurify.sanitize(pageData.parse.text)
           }}
         />
-        {pageData.remaining.sections.map(sectionComponent)}
       </div>
     );
   }
