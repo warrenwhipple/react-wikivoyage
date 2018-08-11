@@ -10,9 +10,9 @@ const LandingPage = () => (
       <p>A React client view for Wikivoyage.</p>
       <p>
         Try any place on Earth in the search bar above. For example:{' '}
-        <Link to="/wiki/bogota">Bogotá</Link> or{' '}
-        <Link to="/wiki/madagascar">Madagascar</Link> or{' '}
-        <Link to="/wiki/antarctica">Antarctica</Link>
+        <Link to="/wiki/Bogotá">Bogotá</Link> or{' '}
+        <Link to="/wiki/Madagascar">Madagascar</Link> or{' '}
+        <Link to="/wiki/Antarctica">Antarctica</Link>
       </p>
       <p>
         This is an early stage development project. It is missing features
