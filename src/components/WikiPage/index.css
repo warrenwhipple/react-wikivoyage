@@ -1,3 +1,7 @@
 .WikiPage {
   margin: 2em;
 }
+
+.WikiPage .mw-editsection {
+  display: None;
+}
